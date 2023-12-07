@@ -9,8 +9,6 @@ export const httpServer = createServer(app);
 export const io = new Server(httpServer);
 
 export async function socket(messages: Message[]): Promise<void> {
-  console.log("entrou");
-
   io.on("connection", (socket) => {
     console.log("A customer has connected!");
 

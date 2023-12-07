@@ -15,7 +15,6 @@ export class ListMessagesUseCase {
 
   async execute(): Promise<void> {
     const messages = await this.messageRepository.list();
-    console.log(messages);
 
     if (messages.length === 0) {
       throw new AppError("messages is empty");
