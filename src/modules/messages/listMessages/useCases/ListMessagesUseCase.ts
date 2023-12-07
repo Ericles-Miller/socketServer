@@ -1,4 +1,4 @@
-import { io } from "jobs/sockets";
+import { socket } from "jobs/sockets";
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "@shared/errors/AppError";
@@ -15,14 +15,12 @@ export class ListMessagesUseCase {
 
   async execute(): Promise<void> {
     const messages = await this.messageRepository.list();
+    console.log(messages);
 
     if (messages.length === 0) {
       throw new AppError("messages is empty");
     }
 
-    const mensagensTeste = [{ id: 1, text: 'Teste 1' }, { id: 2, text: 'Teste 2' }];
-
-
-    io.emit("sendMessages", mensagensTeste);
+    await socket(messages);
   }
 }

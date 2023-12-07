@@ -1,16 +1,23 @@
-// sockets.ts
-import { createServer } from "http"; // Adicione esta linha para importar createServer
+// socket.ts
+import { Message } from "@prisma/client";
+import { createServer } from "http";
 import { Server } from "socket.io";
 
 import { app } from "@shared/infra/http/app";
 
-const server = createServer(app); // Use createServer em vez de http.createServer
-export const io = new Server(server);
+export const httpServer = createServer(app);
+export const io = new Server(httpServer);
 
-io.on("connection", (socket) => {
-  console.log("A customer has connected!");
+export async function socket(messages: Message[]): Promise<void> {
+  console.log("entrou");
 
-  socket.on("disconnect", () => {
-    console.log("A customer has disconnected");
+  io.on("connection", (socket) => {
+    console.log("A customer has connected!");
+
+    io.emit("sendMessages", messages);
+
+    socket.on("disconnect", () => {
+      console.log("A customer has disconnected");
+    });
   });
-});
+}
